@@ -2,10 +2,32 @@
 <html>
 
 <head>
+	<title>
+    Jworks News | Detail
+  </title>
   <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet"></link>
 </head>
 
 <body>
+  <header>
+    <h1>{{news.title}}</h1>
+    <div>
+      {{news.points}} points | By {{news.author}} | <a href="{{news.url}}">{{news.url}}</a>
+    </div>
+  </header>
+  <main>
+    {% for comment in news.children %}
+      <div>
+        {% if comment.author == None%}
+          [deleted]
+        {% else %}
+          <b>{{comment.author}}:</b>
+          <p>{{comment.text}}</p>
+        {% endif %}
+      </div>
+      <hr>
+    {% endfor %}
+  </main>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 import requests
 from flask import Flask, render_template, request
+# from bs4 import BeautifulSoup
 
 base_url = "http://hn.algolia.com/api/v1"
 
@@ -18,5 +19,16 @@ def make_detail_url(id):
 db = {}
 app = Flask("DayNine")
 
+iban=request.get(new)
+print(iban)
+
+@app.route("/")
+def hoem():
+  choice = request.args.get('order_by')
+  return render_template("index.html", order_by=choice)
+
+@app.route("/<username>")
+def detail(username):
+  return f"Hello {username} how are you?"
 
 app.run(host="0.0.0.0")

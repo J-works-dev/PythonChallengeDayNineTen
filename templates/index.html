@@ -2,11 +2,46 @@
 <html>
 
 <head>
+	<title>
+    Jworks News
+  </title>
   <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet"></link>
 </head>
 
 <body>
-  
+  <header>
+    <h1>Jworks News</h1>
+    <div>
+      Order by:
+      {% if order_by == 'new' %}
+        <a href="/?order_by=popular">Popular</a>
+      {% else %}
+        <b>Popular</b>
+      {% endif %}
+      |
+      {% if order_by == 'popular' %}
+        <a href="/?order_by=new">New</a>
+      {% else %}
+        <b>New</b>
+      {% endif %}
+    </div>
+  </header>
+  <main>
+    {% for news in allNews %}
+      <div>
+        <div>
+          <a href="/{{news.objectID}}">
+            <h3>{{news.title}}</h3>
+          </a>
+          (<a href="{{news.url}}">{{news.url}}</a>)
+        </div>
+        <div>
+            {{news.points}} points | By: {{news.author}} | {{news.num_comments}} comments
+        </div>
+      </div>
+      <hr />
+    {% endfor %}
+  </main>
 </body>
 
 </html>
