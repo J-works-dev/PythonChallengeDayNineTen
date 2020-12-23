@@ -20,25 +20,35 @@ def make_detail_url(id):
 
 db = {}
 app = Flask("DayNine")
-allNews = {}
-order_by = "popular"
+# allNews = {}
+# order_by = "popular"
 
 def getNews(url):
-  allNews = requests.get(url).json() #, params={allNews: value}, timeout=5)
-  print(allNews['hits'])
-  # print(allNews["hits"].text)
-  return allNews
+  data = requests.get(url).json() #, params={data: value}, timeout=5)
+  print(data['hits'])
+  # print(data["hits"].text)
+  return data['hits']
 
 @app.route("/")
 def home():
   choice = request.args.get('order_by')
-  if choice == "new":
-    return render_template("index.html", order_by = "new", allNews = getNews(new))
-  else: # order_by == "popular":
-    return render_template("index.html", order_by = "popular", allNews = getNews(popular))
+  if choice not in db:
+    if choice == "new":
+      allNews = getNews(new)
+    elif choice == "popular":
+      allNews = getNews(popular)
+    db[choice] = allNews
+  allNews = db[choice]
+  return render_template("index.html", order_by = choice, allNews = allNews)
+  # if choice == "new":
+  #   return render_template("index.html", order_by = "new", allNews = getNews(new))
+  # else: # order_by == "popular":
+  #   return render_template("index.html", order_by = "popular", allNews = getNews(popular))
 
-# @app.route("/<id>")
-# def detail(id):
-#   return render_template("detail.html", id=id, news=news)
+@app.route("/<id>")
+def detail(id):
+  detailData = requests.get(make_detail_url(id))
+  news = detailData.json()
+  return render_template("detail.html", news=news)
 
 app.run(host="0.0.0.0")
