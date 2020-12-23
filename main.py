@@ -2,6 +2,8 @@ import requests
 from flask import Flask, render_template, request
 # from bs4 import BeautifulSoup
 
+# os.system("clear")
+
 base_url = "http://hn.algolia.com/api/v1"
 
 # This URL gets the newest stories.
@@ -18,17 +20,25 @@ def make_detail_url(id):
 
 db = {}
 app = Flask("DayNine")
+allNews = {}
+order_by = "popular"
 
-iban=request.get(new)
-print(iban)
+def getNews(url):
+  allNews = requests.get(url).json() #, params={allNews: value}, timeout=5)
+  print(allNews['hits'])
+  # print(allNews["hits"].text)
+  return allNews
 
 @app.route("/")
-def hoem():
+def home():
   choice = request.args.get('order_by')
-  return render_template("index.html", order_by=choice)
+  if choice == "new":
+    return render_template("index.html", order_by = "new", allNews = getNews(new))
+  else: # order_by == "popular":
+    return render_template("index.html", order_by = "popular", allNews = getNews(popular))
 
-@app.route("/<username>")
-def detail(username):
-  return f"Hello {username} how are you?"
+# @app.route("/<id>")
+# def detail(id):
+#   return render_template("detail.html", id=id, news=news)
 
 app.run(host="0.0.0.0")
