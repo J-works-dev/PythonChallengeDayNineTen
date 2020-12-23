@@ -1,7 +1,7 @@
 # PythonChallengeDayNineTen
 from Repl.it
 
-## Nomad Academy Python challenge Day 6
+## Nomad Academy Python challenge Day 9-10
 Using this boilerplate, build a program that:
 
 ### criteria
