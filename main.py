@@ -20,25 +20,27 @@ def make_detail_url(id):
 
 db = {}
 app = Flask("DayNine")
-# allNews = {}
-# order_by = "popular"
+allNews = {}
 
 def getNews(url):
-  data = requests.get(url).json() #, params={data: value}, timeout=5)
-  print(data['hits'])
-  # print(data["hits"].text)
-  return data['hits']
+  allNews = requests.get(url).json() #, params={allNews: value}, timeout=5)
+  # print(allNews['hits'])
+  # print(allNews["hits"].text)
+  return allNews['hits']
 
 @app.route("/")
 def home():
   choice = request.args.get('order_by')
+  if choice is None:
+    choice = 'popular'
   if choice not in db:
     if choice == "new":
       allNews = getNews(new)
-    elif choice == "popular":
+    else: # choice == "popular":
       allNews = getNews(popular)
     db[choice] = allNews
   allNews = db[choice]
+  print(choice)
   return render_template("index.html", order_by = choice, allNews = allNews)
   # if choice == "new":
   #   return render_template("index.html", order_by = "new", allNews = getNews(new))
@@ -48,6 +50,7 @@ def home():
 @app.route("/<id>")
 def detail(id):
   detailData = requests.get(make_detail_url(id))
+  print(detailData.text)
   news = detailData.json()
   return render_template("detail.html", news=news)
 
